@@ -1866,7 +1866,16 @@ do
 			local matching_versions, is_matched = {}
 
 			-- * https://setup.rbxcdn.com/versionQTStudio seems to be a bit behind DeployHistory.txt
-			local DeployHistory = string.split(game:HttpGet("https://setup.rbxcdn.com/DeployHistory.txt", true), "\n")
+local okDH, deployRaw = pcall(game.HttpGet, game,
+    "https://setup.rbxcdn.com/DeployHistory.txt", true
+)
+
+if not okDH then
+    return
+end
+
+local DeployHistory = string.split(deployRaw, "\n")
+
 			for i = #DeployHistory, 1, -1 do
 				local line = DeployHistory[i]
 
