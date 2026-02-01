@@ -2,6 +2,8 @@
 --!optimize 2
 --!divine-intellect
 -- https://discord.gg/wx4ThpAsmw
+print("string =", string)
+print("string.find =", string and string.find)
 
 local function string_find(s, pattern)
 	return string.find(s, pattern, nil, true)
