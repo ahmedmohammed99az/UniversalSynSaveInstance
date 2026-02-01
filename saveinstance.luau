@@ -2108,10 +2108,9 @@ end
 
 		return classList
 	end
-
-	local ok, result = pcall(FetchAPI)
-	if ok then
-		ClassList = result
+	local ok, api = pcall(FetchAPI)
+	if not ok then
+    	error(api)
 	else
 		warn("Failed to load the API Dump")
 		warn(result)
