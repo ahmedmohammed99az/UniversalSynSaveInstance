@@ -1900,23 +1900,34 @@ do
 					end
 				end
 			end
-			if writefile then
-				writefile(CLIENT_VERSION_str, API_Dump)
-			end
+			if writefile and type(API_Dump) == "string" then
+            	writefile(CLIENT_VERSION_str, API_Dump)
+            end
+
 		end)
 
-		if not ok or not API_Dump then
-			warn("[DEBUG] Failed to get " .. version() .. " version API Dump, trying latest..")
-			warn("[DEBUG]", err)
-			API_Dump = service.HttpService:JSONEncode(
-				service.HttpService:JSONDecode(
-					game:HttpGet(
-						"https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/Mini-API-Dump.json",
-						true
-					)
-				).Classes
-			)
-		end
+if not ok or not API_Dump then
+    warn("[DEBUG] Failed to get " .. version() .. " version API Dump, trying latest..")
+    warn("[DEBUG]", err)
+
+    local fallbackOk, fallbackResult = pcall(function()
+        return service.HttpService:JSONEncode(
+            service.HttpService:JSONDecode(
+                game:HttpGet(
+                    "https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/Mini-API-Dump.json",
+                    true
+                )
+            ).Classes
+        )
+    end)
+
+    if fallbackOk and type(fallbackResult) == "string" then
+        API_Dump = fallbackResult
+    else
+        error("[SSI] API dump failed completely (mobile HTTP blocked)")
+    end
+end
+
 
 		local classList = {}
 		local tmp_classDict = {}
